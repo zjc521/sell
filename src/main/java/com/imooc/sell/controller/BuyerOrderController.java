@@ -31,6 +31,13 @@ public class BuyerOrderController {
     private OrderService orderService;
     @Autowired
     private BuyerService buyerService;
+    /*
+     * @Author zhangjincai
+     * @Description //TODO 
+     * @Date 16:58 2019/7/30
+     * @Param [orderForm, bindingResult]
+     * @return com.imooc.sell.VO.ResultVO<java.util.Map<java.lang.String,java.lang.String>>
+     */
     //创建订单
     public ResultVO<Map<String,String>> create(@Valid OrderForm orderForm, BindingResult
                                                bindingResult){
