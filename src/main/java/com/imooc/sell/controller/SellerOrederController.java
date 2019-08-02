@@ -44,10 +44,58 @@ public class SellerOrederController {
         }catch(SellException e){
             log.error("【卖家端取消订单】 发生异常",e);
             map.put("msg", ResultEnum.ORDER_NOT_EXIST);
-            map.put("url","/sell/seller/order/lsit");
+            map.put("url","/sell/seller/order/list");
             return new ModelAndView("common/error",map);
         }
         map.put("msg",ResultEnum.SUCCESS.getMessage());
+        map.put("url","/sell/seller/order/list");
+        return new ModelAndView("common/success",map);
+    }
+
+
+    /**订单详情
+     * @Author zhangjincai
+     * @Description //TODO
+     * @Date 11:20 2019/8/2
+     * @Param
+     * @return
+     */
+    @GetMapping("/detail")
+    public ModelAndView datail(@RequestParam("orderId") String orderId,
+                               Map<String,Object> map){
+        OrderDTO orderDTO = new OrderDTO();
+        try{
+            orderDTO = orderService.findOne(orderId);
+        }catch(SellException e){
+            log.error("【卖家端查询订单详情】 发生异常{}" ,e);
+            map.put("msg",e.getMessage());
+            map.put("url","/sell/seller/order/list");
+            return new ModelAndView("common/error",map);
+
+        }
+        map.put("orderDTO",orderDTO);
+        return new ModelAndView("order/detail",map);
+    }
+    /*完结订单
+     * @Author zhangjincai
+     * @Description //TODO
+     * @Date 16:28 2019/8/2
+     * @Param
+     * @return
+     */
+    @GetMapping("/finish")
+    public ModelAndView finished(@RequestParam("orderId") String orderId,
+                                 Map<String,Object> map){
+        try{
+            OrderDTO orderDTO = orderService.findOne(orderId);
+            orderService.finish(orderDTO);
+        }catch (SellException e){
+            log.error("【卖家端完结订单】 发生异常",e);
+            map.put("msg",e.getMessage());
+            map.put("url","/sell/seller/order/list");
+            return new ModelAndView("common/error",map);
+        }
+        map.put("msg",ResultEnum.ORDER_FINISH_SUCCESS.getMessage());
         map.put("url","/sell/seller/order/list");
         return new ModelAndView("common/success",map);
     }
